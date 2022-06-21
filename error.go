@@ -31,6 +31,9 @@ func (e *DebugContextError) Error() string {
 	var result string
 	var line string
 	for {
+		if err == nil {
+			break
+		}
 		subErr, ok = err.(unwrapper)
 		if ok {
 			debugSubErr, ok = subErr.(*DebugContextError)
