@@ -58,3 +58,14 @@ func TestAs(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestNilWrap(t *testing.T) {
+	var err error = nil
+	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(``, err)
+	if err != nil {
+		fmt.Println(`wrapped nil is stackerror`)
+		t.Fail()
+	}
+}

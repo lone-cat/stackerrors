@@ -30,10 +30,7 @@ func (e *DebugContextError) Error() string {
 	var ok bool
 	var result string
 	var line string
-	for {
-		if err == nil {
-			break
-		}
+	for err != nil {
 		subErr, ok = err.(unwrapper)
 		if ok {
 			debugSubErr, ok = subErr.(*DebugContextError)
@@ -57,7 +54,7 @@ func (e *DebugContextError) Error() string {
 			err = subErr.Unwrap()
 		} else {
 			result += err.Error()
-			break
+			err = nil
 		}
 	}
 	return result
@@ -75,25 +72,28 @@ func (e *DebugContextError) Line() int {
 	return int(e.line)
 }
 
-func New(context string, text string) *DebugContextError {
+func New(context string, text string) error {
 	err := errors.New(text)
 	return wrap(context, err, 1)
 }
 
-func Newf(context string, format string, args ...any) *DebugContextError {
+func Newf(context string, format string, args ...any) error {
 	err := fmt.Errorf(format, args...)
 	return wrap(context, err, 1)
 }
 
-func Wrap(context string, err error) *DebugContextError {
+func Wrap(context string, err error) error {
+	if err == nil {
+		return nil
+	}
 	return wrap(context, err, 1)
 }
 
-func WrapInDefer(context string, err error) *DebugContextError {
+func WrapInDefer(context string, err error) error {
 	return wrap(context, err, 2)
 }
 
-func wrap(context string, err error, depth uint) *DebugContextError {
+func wrap(context string, err error, depth uint) error {
 	if err == nil {
 		return nil
 	}
