@@ -31,7 +31,7 @@ func TestErrorInPlace(t *testing.T) {
 
 func inPlaceErrorGenerator() (err error) {
 	err = defaultErr
-	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(err)
 	_, _, inplaceExpectedLine, _ = runtime.Caller(0)
 	inplaceExpectedLine--
 	return

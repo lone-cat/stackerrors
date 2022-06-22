@@ -18,15 +18,16 @@ func init() {
 
 func TestOutput(t *testing.T) {
 	err := defaultErr
-	ctxs := [3]string{`root Context`, `package Context`, `func Context`}
-	err = stackerrors.Wrap(ctxs[2], err)
-	err = stackerrors.Wrap(ctxs[1], err)
-	err = stackerrors.Wrap(ctxs[0], err)
-	_, file, line, _ := runtime.Caller(0)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
+	pc, file, line, _ := runtime.Caller(0)
+	functionName := stackerrors.GetShortFuncNameFromPc(pc)
+
 	lines := [4]string{``, ``, ``, ``}
 	lineNumbers := [3]int{line - 1, line - 2, line - 3}
 	for x := 0; x < 3; x++ {
-		lines[x] = fmt.Sprintf(`%s %s:%d > `, ctxs[x], file, lineNumbers[x])
+		lines[x] = fmt.Sprintf(`%s %s:%d > `, functionName, file, lineNumbers[x])
 	}
 	lines[3] = defaultErr.Error()
 	expectedOut := strings.Join(lines[:], "\r\n")

@@ -15,7 +15,7 @@ func init() {
 
 func TestWrap(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(err)
 	if err == defaultErr {
 		fmt.Println(`err == defaultErr`)
 		t.Fail()
@@ -24,7 +24,7 @@ func TestWrap(t *testing.T) {
 
 func TestUnwrap(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(err)
 
 	wrappedErr := stackerrors.NilError()
 	errors.As(err, &wrappedErr)
@@ -36,9 +36,9 @@ func TestUnwrap(t *testing.T) {
 
 func TestIs(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(``, err)
-	err = stackerrors.Wrap(``, err)
-	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
 	if !errors.Is(err, defaultErr) {
 		fmt.Println(`!errors.Is(err, defaultErr)`)
 		t.Fail()
@@ -47,9 +47,9 @@ func TestIs(t *testing.T) {
 
 func TestAs(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(``, err)
-	err = stackerrors.Wrap(``, err)
-	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
 
 	wrappedErr := stackerrors.NilError()
 	ok := errors.As(err, &wrappedErr)
@@ -61,9 +61,9 @@ func TestAs(t *testing.T) {
 
 func TestNilWrap(t *testing.T) {
 	var err error = nil
-	err = stackerrors.Wrap(``, err)
-	err = stackerrors.Wrap(``, err)
-	err = stackerrors.Wrap(``, err)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
+	err = stackerrors.Wrap(err)
 	if err != nil {
 		fmt.Println(`wrapped nil is stackerror`)
 		t.Fail()

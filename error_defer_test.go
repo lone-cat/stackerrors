@@ -32,7 +32,7 @@ func TestErrorInDefer(t *testing.T) {
 func inDeferErrorGenerator() (err error) {
 	defer func() {
 		if err != nil {
-			err = stackerrors.WrapInDefer(``, err)
+			err = stackerrors.WrapInDefer(err)
 		}
 	}()
 
