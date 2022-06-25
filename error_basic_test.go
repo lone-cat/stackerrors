@@ -2,7 +2,6 @@ package stackerrors_test
 
 import (
 	"errors"
-	"fmt"
 	"github.com/lone-cat/stackerrors"
 	"io"
 	"testing"
@@ -17,8 +16,7 @@ func TestWrap(t *testing.T) {
 	err := defaultErr
 	err = stackerrors.Wrap(err)
 	if err == defaultErr {
-		fmt.Println(`err == defaultErr`)
-		t.Fail()
+		t.Error(`err == defaultErr`)
 	}
 }
 
@@ -29,8 +27,7 @@ func TestUnwrap(t *testing.T) {
 	wrappedErr := stackerrors.NilError()
 	errors.As(err, &wrappedErr)
 	if wrappedErr.Unwrap() != defaultErr {
-		fmt.Println(`err.Unwrap() != defaultErr`)
-		t.Fail()
+		t.Error(`err.Unwrap() != defaultErr`)
 	}
 }
 
@@ -40,8 +37,7 @@ func TestIs(t *testing.T) {
 	err = stackerrors.Wrap(err)
 	err = stackerrors.Wrap(err)
 	if !errors.Is(err, defaultErr) {
-		fmt.Println(`!errors.Is(err, defaultErr)`)
-		t.Fail()
+		t.Error(`!errors.Is(err, defaultErr)`)
 	}
 }
 
@@ -54,8 +50,7 @@ func TestAs(t *testing.T) {
 	wrappedErr := stackerrors.NilError()
 	ok := errors.As(err, &wrappedErr)
 	if !ok {
-		fmt.Println(`errors.As(err, wrappedErr) fails`)
-		t.Fail()
+		t.Error(`errors.As(err, wrappedErr) fails`)
 	}
 }
 
@@ -65,7 +60,6 @@ func TestNilWrap(t *testing.T) {
 	err = stackerrors.Wrap(err)
 	err = stackerrors.Wrap(err)
 	if err != nil {
-		fmt.Println(`wrapped nil is stackerror`)
-		t.Fail()
+		t.Error(`wrapped nil is stackerror`)
 	}
 }

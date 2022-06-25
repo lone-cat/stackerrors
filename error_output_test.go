@@ -33,8 +33,6 @@ func TestOutput(t *testing.T) {
 	expectedOut := strings.Join(lines[:], "\r\n")
 	out := err.Error()
 	if out != expectedOut {
-		fmt.Println(out)
-		fmt.Println(expectedOut)
-		t.Fail()
+		t.Errorf("actual output differs from expected.\r\n---actual:\r\n%s\r\n---expected:\r\n%s", out, expectedOut)
 	}
 }

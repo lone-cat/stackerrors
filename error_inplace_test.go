@@ -2,7 +2,6 @@ package stackerrors_test
 
 import (
 	"errors"
-	"fmt"
 	"github.com/lone-cat/stackerrors"
 	"io"
 	"runtime"
@@ -21,11 +20,10 @@ func TestErrorInPlace(t *testing.T) {
 	wrappedErr := stackerrors.NilError()
 	ok := errors.As(err, &wrappedErr)
 	if !ok {
-		t.Fail()
+		t.Fatal(`unable to convert error interface to wrappedErr`)
 	}
 	if wrappedErr.Line() != inplaceExpectedLine {
-		fmt.Printf("expected inplace error line is %d, actual is %d\r\n", inplaceExpectedLine, wrappedErr.Line())
-		t.Fail()
+		t.Errorf(`expected inplace error line is "%d", actual is "%d"`, inplaceExpectedLine, wrappedErr.Line())
 	}
 }
 
