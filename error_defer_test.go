@@ -1,15 +1,14 @@
-package stackerrors_test
+package stackerrors
 
 import (
 	"errors"
-	"github.com/lone-cat/stackerrors"
 	"io"
 	"runtime"
 	"testing"
 )
 
 func init() {
-	stackerrors.SetDebugMode(true)
+	SetDebugMode(true)
 	defaultErr = io.EOF
 }
 
@@ -17,7 +16,7 @@ var deferExpectedLine int
 
 func TestErrorInDefer(t *testing.T) {
 	err := inDeferErrorGenerator()
-	wrappedErr := stackerrors.NilError()
+	var wrappedErr *DebugContextError
 	ok := errors.As(err, &wrappedErr)
 	if !ok {
 		t.Fatal(`unable to convert error interface to wrappedErr`)
@@ -30,7 +29,7 @@ func TestErrorInDefer(t *testing.T) {
 func inDeferErrorGenerator() (err error) {
 	defer func() {
 		if err != nil {
-			err = stackerrors.WrapInDefer(err)
+			err = WrapInDefer(err)
 		}
 	}()
 

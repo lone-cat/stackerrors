@@ -1,20 +1,19 @@
-package stackerrors_test
+package stackerrors
 
 import (
 	"errors"
-	"github.com/lone-cat/stackerrors"
 	"io"
 	"testing"
 )
 
 func init() {
-	stackerrors.SetDebugMode(true)
+	SetDebugMode(true)
 	defaultErr = io.EOF
 }
 
 func TestWrap(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(err)
+	err = Wrap(err)
 	if err == defaultErr {
 		t.Error(`err == defaultErr`)
 	}
@@ -22,9 +21,9 @@ func TestWrap(t *testing.T) {
 
 func TestUnwrap(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(err)
+	err = Wrap(err)
 
-	wrappedErr := stackerrors.NilError()
+	var wrappedErr *DebugContextError
 	errors.As(err, &wrappedErr)
 	if wrappedErr.Unwrap() != defaultErr {
 		t.Error(`err.Unwrap() != defaultErr`)
@@ -33,9 +32,9 @@ func TestUnwrap(t *testing.T) {
 
 func TestIs(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(err)
-	err = stackerrors.Wrap(err)
-	err = stackerrors.Wrap(err)
+	err = Wrap(err)
+	err = Wrap(err)
+	err = Wrap(err)
 	if !errors.Is(err, defaultErr) {
 		t.Error(`!errors.Is(err, defaultErr)`)
 	}
@@ -43,11 +42,11 @@ func TestIs(t *testing.T) {
 
 func TestAs(t *testing.T) {
 	err := defaultErr
-	err = stackerrors.Wrap(err)
-	err = stackerrors.Wrap(err)
-	err = stackerrors.Wrap(err)
+	err = Wrap(err)
+	err = Wrap(err)
+	err = Wrap(err)
 
-	wrappedErr := stackerrors.NilError()
+	var wrappedErr *DebugContextError
 	ok := errors.As(err, &wrappedErr)
 	if !ok {
 		t.Error(`errors.As(err, wrappedErr) fails`)
@@ -56,9 +55,9 @@ func TestAs(t *testing.T) {
 
 func TestNilWrap(t *testing.T) {
 	var err error = nil
-	err = stackerrors.Wrap(err)
-	err = stackerrors.Wrap(err)
-	err = stackerrors.Wrap(err)
+	err = Wrap(err)
+	err = Wrap(err)
+	err = Wrap(err)
 	if err != nil {
 		t.Error(`wrapped nil is stackerror`)
 	}
